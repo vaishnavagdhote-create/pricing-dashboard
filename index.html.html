@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pricing Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; background: #f5f5f5; color: #111; padding: 2rem; }
+
+    .dash { max-width: 800px; margin: auto; }
+    h1 { font-size: 20px; font-weight: 500; margin-bottom: 1.5rem; }
+
+    .toggle { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+    .toggle button {
+      font-size: 13px; padding: 5px 14px; cursor: pointer;
+      border: 1px solid #ccc; border-radius: 8px; background: #fff;
+    }
+    .toggle button.active { background: #e6f1fb; color: #185fa5; border-color: #185fa5; }
+
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+    .metric { background: #efefef; border-radius: 8px; padding: 1rem; }
+    .metric-label { font-size: 12px; color: #666; margin-bottom: 6px; }
+    .metric-value { font-size: 22px; font-weight: 500; }
+    .metric-sub { font-size: 12px; color: green; margin-top: 4px; }
+    .metric-sub.down { color: red; }
+
+    .section-title { font-size: 14px; font-weight: 500; color: #666; margin-bottom: 12px; }
+
+    .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+    .plan { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 1rem 1.25rem; }
+    .plan.featured { border: 2px solid #185fa5; }
+    .plan-badge {
+      display: inline-block; font-size: 11px;
+      background: #e6f1fb; color: #185fa5;
+      padding: 2px 8px; border-radius: 8px; margin-bottom: 8px;
+    }
+    .plan-name { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+    .plan-price { font-size: 24px; font-weight: 500; margin: 8px 0 4px; }
+    .plan-price span { font-size: 13px; font-weight: 400; color: #666; }
+    .plan-users { font-size: 12px; color: #666; margin-bottom: 12px; }
+    .plan-feature { font-size: 13px; color: #555; padding: 4px 0; display: flex; align-items: center; gap: 6px; }
+    .plan-feature i { color: green; font-size: 14px; }
+
+    .revenue-bar { margin-bottom: 1.5rem; }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .bar-label { font-size: 13px; color: #666; width: 60px; flex-shrink: 0; }
+    .bar-track { flex: 1; background: #efefef; border-radius: 4px; height: 10px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; }
+    .bar-val { font-size: 13px; font-weight: 500; width: 60px; text-align: right; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+<div class="dash">
+  <h1>Pricing dashboard</h1>
+
+  <div class="toggle">
+    <button class="active" onclick="setMode('monthly', this)">Monthly</button>
+    <button onclick="setMode('annual', this)">Annual</button>
+  </div>
+
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-label">Total MRR</div>
+      <div class="metric-value" id="mrr">$12,400</div>
+      <div class="metric-sub">↑ 8% this month</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Active users</div>
+      <div class="metric-value">1,240</div>
+      <div class="metric-sub">↑ 3% this month</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Avg revenue/user</div>
+      <div class="metric-value" id="arpu">$10.00</div>
+      <div class="metric-sub">stable</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Churn rate</div>
+      <div class="metric-value">2.1%</div>
+      <div class="metric-sub down">↑ 0.3% this month</div>
+    </div>
+  </div>
+
+  <p class="section-title">Plans</p>
+  <div class="plans">
+    <div class="plan">
+      <p class="plan-name">Starter</p>
+      <p class="plan-price" id="starter-price">$9 <span>/ mo</span></p>
+      <p class="plan-users">Up to 3 users</p>
+      <div class="plan-feature"><i class="ti ti-check"></i>5 projects</div>
+      <div class="plan-feature"><i class="ti ti-check"></i>Basic analytics</div>
+      <div class="plan-feature"><i class="ti ti-check"></i>Email support</div>
+    </div>
+    <div class="plan featured">
+      <span class="plan-badge">Most popular</span>
+      <p class="plan-name">Pro</p>
+      <p class="plan-price" id="pro-price">$29 <span>/ mo</span></p>
+      <p class="plan-users">Up to 10 users</p>
+      <div class="plan-feature"><i class="ti ti-check"></i>Unlimited projects</div>
+      <div class="plan-feature"><i class="ti ti-check"></i>Advanced analytics</div>
+      <div class="plan-feature"><i class="ti ti-check"></i>Priority support</div>
+    </div>
+    <div class="plan">
+      <p class="plan-name">Business</p>
+      <p class="plan-price" id="biz-price">$79 <span>/ mo</span></p>
+      <p class="plan-users">Unlimited users</p>
+      <div class="plan-feature"><i class="ti ti-check"></i>Everything in Pro</div>
+      <div class="plan-feature"><i class="ti ti-check"></i>SSO & audit logs</div>
+      <div class="plan-feature"><i class="ti ti-check"></i>Dedicated manager</div>
+    </div>
+  </div>
+
+  <p class="section-title">Revenue by plan</p>
+  <div class="revenue-bar">
+    <div class="bar-row">
+      <span class="bar-label">Starter</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 20%; background: #5DCAA5;"></div></div>
+      <span class="bar-val">$2,700</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Pro</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 65%; background: #378ADD;"></div></div>
+      <span class="bar-val">$8,700</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Business</span>
+      <div class="bar-track"><div class="bar-fill" style="width: 15%; background: #7F77DD;"></div></div>
+      <span class="bar-val">$1,000</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const prices = {
+    monthly: { starter: '$9', pro: '$29', biz: '$79', mrr: '$12,400', arpu: '$10.00', label: '/ mo' },
+    annual:  { starter: '$86', pro: '$278', biz: '$758', mrr: '$14,900', arpu: '$12.00', label: '/ yr' }
+  };
+
+  function setMode(mode, btn) {
+    document.querySelectorAll('.toggle button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const p = prices[mode];
+    document.getElementById('starter-price').innerHTML = `${p.starter} <span>${p.label}</span>`;
+    document.getElementById('pro-price').innerHTML = `${p.pro} <span>${p.label}</span>`;
+    document.getElementById('biz-price').innerHTML = `${p.biz} <span>${p.label}</span>`;
+    document.getElementById('mrr').textContent = p.mrr;
+    document.getElementById('arpu').textContent = p.arpu;
+  }
+</script>
+</body>
+</html>
